@@ -27,8 +27,8 @@ def create_enemy_cuadrado(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:
                           enemy_info["size"]["y"])
     
     col = pygame.Color(enemy_info["color"]["r"],
-                         enemy_info["color"]["g"],
-                         enemy_info["color"]["b"])
+                       enemy_info["color"]["g"],
+                       enemy_info["color"]["b"])
     
     vel_max = enemy_info["velocity_max"]
     vel_min = enemy_info["velocity_min"]
@@ -44,5 +44,6 @@ def create_enemy_cuadrado(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:
 
 def create_enemy_spawner(ecs_world:esper.World, level_cfg:dict) -> None:
     spawner_entity = ecs_world.create_entity()
-    ecs_world.add_component(spawner_entity, CEnemySpawner(level_cfg))
+    ecs_world.add_component(spawner_entity, 
+                            CEnemySpawner(level_cfg["enemy_spawn_events"]))
     

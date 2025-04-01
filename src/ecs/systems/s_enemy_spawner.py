@@ -2,7 +2,7 @@ import esper
 import pygame
 
 
-from src.ecs.components.c_enemy_spawner import CEnemySpawner
+from src.ecs.components.c_enemy_spawner import CEnemySpawner, SpawnEventData
 from src.create.prefab_creator import create_enemy_cuadrado
 
 
@@ -14,18 +14,16 @@ def system_enemy_spawner(world: esper.World,
     
     c_enemy_spawner: CEnemySpawner
     
-    for entity, c_enemy_spawner in components:
+    for _, c_enemy_spawner in components:
         c_enemy_spawner.elapsed_time += delta_time
-        
-        for event in c_enemy_spawner.spawn_events:
-            if not event["triggered"] and c_enemy_spawner.elapsed_time >= event["time"]:
+        spw_event:SpawnEventData
+        for spw_event in c_enemy_spawner.spawn_event_data:
+            if not spw_event.triggered and c_enemy_spawner.elapsed_time >= spw_event.time: 
+                spw_event.triggered = True                
                 
-                enemy_type = event["enemy_type"]
-                config = enemy_data[enemy_type]
-                pos = pygame.Vector2(event["position"]["x"], event["position"]["y"])
-            
-                create_enemy_cuadrado(world, pos, config)
-                event["triggered"] = True
+                create_enemy_cuadrado(world, 
+                                      spw_event.position,
+                                      enemy_data[spw_event.enemy_type])
 
         
         

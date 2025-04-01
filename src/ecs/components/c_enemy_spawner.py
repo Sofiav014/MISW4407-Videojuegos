@@ -1,9 +1,17 @@
+import pygame
 
 
 class CEnemySpawner:
     def __init__(self, spawn_data: dict) -> None:
-        spawn_events = spawn_data["enemy_spawn_events"]        
-        self.spawn_events = [
-            {**event, "triggered": False} for event in spawn_events
-        ]
         self.elapsed_time = 0.0
+        self.spawn_event_data:list[SpawnEventData] = []      
+        for event in spawn_data:
+            self.spawn_event_data.append(SpawnEventData(event))  
+        
+class SpawnEventData:
+    def __init__(self, event_data: dict) -> None:
+        self.time:float = event_data["time"]
+        self.enemy_type:str = event_data["enemy_type"]
+        self.position:pygame.Vector2 = pygame.Vector2(event_data["position"]["x"], 
+                                                      event_data["position"]["y"])
+        self.triggered:bool = False
