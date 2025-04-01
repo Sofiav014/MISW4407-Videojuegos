@@ -54,8 +54,8 @@ def create_player_square(ecs_world:esper.World, player_info:dict, player_lvl_inf
                        player_info["color"]["g"],
                        player_info["color"]["b"])
     
-    pos = pygame.Vector2(player_lvl_info["position"]["x"] - size.x / 2,
-                         player_lvl_info["position"]["y"] - size.y / 2)
+    pos = pygame.Vector2(player_lvl_info["position"]["x"] - (size.x / 2),
+                         player_lvl_info["position"]["y"] - (size.y / 2))
     
     vel = pygame.Vector2(0,0)
     
