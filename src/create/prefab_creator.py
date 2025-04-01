@@ -71,4 +71,11 @@ def create_enemy_spawner(ecs_world:esper.World, level_cfg:dict) -> None:
 
 def create_input_player(ecs_world:esper.World) :
     input_left = ecs_world.create_entity()
+    input_right = ecs_world.create_entity()
+    input_up = ecs_world.create_entity()
+    input_down = ecs_world.create_entity()
     ecs_world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
+    ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
+    ecs_world.add_component(input_up, CInputCommand("PLAYER_UP", pygame.K_UP))
+    ecs_world.add_component(input_down, CInputCommand("PLAYER_DOWN", pygame.K_DOWN))
+    
