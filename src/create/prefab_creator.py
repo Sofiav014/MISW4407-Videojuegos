@@ -6,12 +6,14 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
+from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_player import CTagPlayer
 
 def create_square(ecs_world:esper.World,
                    size:pygame.Vector2,
                    pos: pygame.Vector2,
                    vel: pygame.Vector2,
-                   color: pygame.Color) -> None:
+                   color: pygame.Color) -> int:
 
     cuad_entity = ecs_world.create_entity()
     ecs_world.add_component(cuad_entity,
@@ -20,6 +22,7 @@ def create_square(ecs_world:esper.World,
                             CSurface(size,color))
     ecs_world.add_component(cuad_entity,
                             CVelocity(vel))
+    return cuad_entity
     
     
 def create_enemy_square(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:dict):
@@ -38,10 +41,11 @@ def create_enemy_square(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:di
     
     vel = pygame.Vector2(vel_x, vel_y)
     
-    create_square(ecs_world, size, pos, vel, color)    
+    enemy_entity = create_square(ecs_world, size, pos, vel, color)    
+    ecs_world.add_component(enemy_entity, CTagEnemy())
 
 
-def create_player_square(ecs_world:esper.World, player_info:dict, player_lvl_info:dict) -> None:
+def create_player_square(ecs_world:esper.World, player_info:dict, player_lvl_info:dict) -> int:
     size = pygame.Vector2(player_info["size"]["x"], 
                           player_info["size"]["y"])
     
@@ -54,7 +58,9 @@ def create_player_square(ecs_world:esper.World, player_info:dict, player_lvl_inf
     
     vel = pygame.Vector2(0,0)
     
-    create_square(ecs_world, size, pos, vel, color) 
+    player_entity = create_square(ecs_world, size, pos, vel, color) 
+    ecs_world.add_component(player_entity, CTagPlayer())
+    return player_entity
 
 def create_enemy_spawner(ecs_world:esper.World, level_cfg:dict) -> None:
     spawner_entity = ecs_world.create_entity()
