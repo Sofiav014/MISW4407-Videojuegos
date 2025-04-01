@@ -1,9 +1,7 @@
 import esper
-import pygame
-
 
 from src.ecs.components.c_enemy_spawner import CEnemySpawner, SpawnEventData
-from src.create.prefab_creator import create_enemy_cuadrado
+from src.create.prefab_creator import create_enemy_square
 
 
 def system_enemy_spawner(world: esper.World, 
@@ -21,7 +19,7 @@ def system_enemy_spawner(world: esper.World,
             if not spw_event.triggered and c_enemy_spawner.elapsed_time >= spw_event.time: 
                 spw_event.triggered = True                
                 
-                create_enemy_cuadrado(world, 
+                create_enemy_square(world, 
                                       spw_event.position,
                                       enemy_data[spw_event.enemy_type])
 

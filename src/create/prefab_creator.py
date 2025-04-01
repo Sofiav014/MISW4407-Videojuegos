@@ -7,7 +7,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
 
-def crear_cuadrado(ecs_world:esper.World,
+def create_square(ecs_world:esper.World,
                    size:pygame.Vector2,
                    pos: pygame.Vector2,
                    vel: pygame.Vector2,
@@ -22,7 +22,7 @@ def crear_cuadrado(ecs_world:esper.World,
                             CVelocity(vel))
     
     
-def create_enemy_cuadrado(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:dict):
+def create_enemy_square(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:dict):
     size = pygame.Vector2(enemy_info["size"]["x"], 
                           enemy_info["size"]["y"])
     
@@ -38,7 +38,7 @@ def create_enemy_cuadrado(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:
     
     vel = pygame.Vector2(vel_x, vel_y)
     
-    crear_cuadrado(ecs_world, size, pos, vel, col)    
+    create_square(ecs_world, size, pos, vel, col)    
     
 
 
