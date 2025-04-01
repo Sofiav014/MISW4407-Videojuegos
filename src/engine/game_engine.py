@@ -2,7 +2,7 @@ import pygame
 import esper
 import json
 
-from src.create.prefab_creator import create_enemy_spawner
+from src.create.prefab_creator import create_enemy_spawner, create_player_square
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_rendering import system_rendering
@@ -30,12 +30,14 @@ class GameEngine:
 
 
     def _load_json(self):
-        with open("./assets/cfg/cfg_01/window.json", encoding="utf-8") as window_file:
+        with open("./assets/cfg/window.json", encoding="utf-8") as window_file:
             self.window_cfg = json.load(window_file)
-        with open("./assets/cfg/cfg_01//enemies.json") as enemies_file:
+        with open("./assets/cfg/enemies.json") as enemies_file:
             self.enemies_cfg = json.load(enemies_file)
-        with open("./assets/cfg/cfg_01//level_01.json") as level_01_file:
+        with open("./assets/cfg/level_01.json") as level_01_file:
             self.level_01_cfg = json.load(level_01_file)
+        with open("./assets/cfg/player.json") as player_file:
+            self.player_cfg = json.load(player_file)
 
 
     def run(self) -> None:
@@ -50,6 +52,7 @@ class GameEngine:
 
 
     def _create(self):
+        create_player_square(self.ecs_world, self.player_cfg, self.level_01_cfg["player_spawn"])
         create_enemy_spawner(self.ecs_world, self.level_01_cfg)
 
 
