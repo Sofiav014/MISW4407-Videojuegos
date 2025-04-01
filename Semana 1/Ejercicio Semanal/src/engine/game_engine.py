@@ -74,7 +74,11 @@ class GameEngine:
 
 
     def _draw(self):
-        self.screen.fill((0, 200, 128))
+        self.screen.fill(
+            (self.window_cfg["bg_color"]["r"], 
+             self.window_cfg["bg_color"]["g"], 
+             self.window_cfg["bg_color"]["b"])
+        )
 
         system_rendering(self.ecs_world, self.screen)
 
