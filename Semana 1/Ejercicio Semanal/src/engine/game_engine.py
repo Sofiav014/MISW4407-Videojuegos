@@ -33,11 +33,11 @@ class GameEngine:
 
 
     def _load_json(self):
-        with open("./assets/cfg/window.json", encoding="utf-8") as window_file:
+        with open("./assets/cfg/cfg_00/window.json", encoding="utf-8") as window_file:
             self.window_cfg = json.load(window_file)
-        with open("./assets/cfg/enemies.json") as enemies_file:
+        with open("./assets/cfg/cfg_00//enemies.json") as enemies_file:
             self.enemies_cfg = json.load(enemies_file)
-        with open("./assets/cfg/level_01.json") as level_01_file:
+        with open("./assets/cfg/cfg_00//level_01.json") as level_01_file:
             self.level_cfg = json.load(level_01_file)
 
 
