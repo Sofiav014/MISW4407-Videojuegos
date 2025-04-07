@@ -2,15 +2,21 @@ import pygame
 import esper
 import json
 
-from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_player_square
+from src.create.prefab_creator import create_bullet, create_enemy_spawner, create_input_player, create_player_square
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
+from src.ecs.components.c_surface import CSurface
+from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.components.tags.c_tag_bullet import CTagBullet
+from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
 from src.ecs.systems.s_input_player import system_input_player
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_rendering import system_rendering
-from src.ecs.systems.s_screen_bounce import system_screen_bounce
+from src.ecs.systems.s_screen_bounce_enemy import system_screen_bounce_enemy
+from src.ecs.systems.s_screen_bullet import system_screen_bullet
+from src.ecs.systems.s_screen_player import system_screen_player
 
 
 class GameEngine:
@@ -31,17 +37,20 @@ class GameEngine:
                                      self.window_cfg["bg_color"]["g"], 
                                      self.window_cfg["bg_color"]["b"])
         self.ecs_world = esper.World()
+        self.bullets_alive = 0
 
 
     def _load_json(self):
-        with open("./assets/cfg/window.json", encoding="utf-8") as window_file:
+        with open("./assets/cfg/cfg_00/window.json", encoding="utf-8") as window_file:
             self.window_cfg = json.load(window_file)
-        with open("./assets/cfg/enemies.json") as enemies_file:
+        with open("./assets/cfg/cfg_00/enemies.json") as enemies_file:
             self.enemies_cfg = json.load(enemies_file)
-        with open("./assets/cfg/level_01.json") as level_01_file:
+        with open("./assets/cfg/cfg_00/level_01.json") as level_01_file:
             self.level_01_cfg = json.load(level_01_file)
-        with open("./assets/cfg/player.json") as player_file:
+        with open("./assets/cfg/cfg_00/player.json") as player_file:
             self.player_cfg = json.load(player_file)
+        with open("./assets/cfg/cfg_00/bullet.json") as bullet_file:
+            self.bullet_cfg = json.load(bullet_file)
 
 
     def run(self) -> None:
@@ -58,6 +67,8 @@ class GameEngine:
     def _create(self):
         self._player_entity = create_player_square(self.ecs_world, self.player_cfg, self.level_01_cfg["player_spawn"])
         self._player_c_velocity = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
+        self._player_c_transform = self.ecs_world.component_for_entity(self._player_entity, CTransform)
+        self._player_c_surface = self.ecs_world.component_for_entity(self._player_entity, CSurface)
         
         create_enemy_spawner(self.ecs_world, self.level_01_cfg)
         create_input_player(self.ecs_world)
@@ -78,9 +89,15 @@ class GameEngine:
     def _update(self):
         system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies_cfg)
         system_movement(self.ecs_world, self.delta_time)
-        system_screen_bounce(self.ecs_world, self.screen)
+        system_screen_bounce_enemy(self.ecs_world, self.screen)
+        system_screen_player(self.ecs_world, self.screen)
+        system_screen_bullet(self.ecs_world, self.screen)
+
         system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg)
+        system_collision_bullet_enemy(self.ecs_world)
         self.ecs_world._clear_dead_entities()
+        
+        self.bullets_alive = len(self.ecs_world.get_component(CTagBullet)) # Lista de tuplas
 
 
     def _draw(self):
@@ -117,3 +134,12 @@ class GameEngine:
                 self._player_c_velocity.vel.y += self.player_cfg["input_velocity"]
             elif c_input.phase == CommandPhase.END:
                 self._player_c_velocity.vel.y -= self.player_cfg["input_velocity"]
+        elif c_input.name == "PLAYER_FIRE":
+            if c_input.phase == CommandPhase.START:
+                if self.bullets_alive < self.level_01_cfg["player_spawn"]["max_bullets"]:
+                    create_bullet(self.ecs_world, 
+                                    c_input.mouse_pos, 
+                                    self._player_c_transform.pos, 
+                                    self.bullet_cfg, 
+                                    self._player_c_surface.surf.get_size())
+                

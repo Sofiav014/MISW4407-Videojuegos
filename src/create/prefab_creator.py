@@ -103,7 +103,7 @@ def create_bullet(ecs_world:esper.World, end_pos:pygame.Vector2, start_pos:pygam
                        bullet_info["color"]["g"],
                        bullet_info["color"]["b"])
     
-    pos = pygame.Vector2(start_pos.x + (player_size.x / 2), start_pos.y + (player_size.y / 2))
+    pos = pygame.Vector2(start_pos.x + (player_size[0] / 2), start_pos.y + (player_size[1] / 2))
     direction = (end_pos - start_pos).normalize()
     vel = direction * bullet_info["velocity"]
     bullet_entity = create_square(ecs_world, size, pos, vel, color)
