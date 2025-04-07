@@ -24,4 +24,13 @@ def system_input_player (ecs_world: esper.World,
             c_input.phase = CommandPhase.END
             do_action(c_input)
             
+        if events.type == pygame.MOSEBUTTONDOWN and c_input.key == events.button:
+            c_input.phase = CommandPhase.START
+            c_input.mouse_pos.xy = pygame.mouse.get_pos()
+            do_action(c_input)
+        elif events.type == pygame.MOUSEBUTTONUP and c_input.key == events.button:
+            c_input.phase = CommandPhase.END
+            c_input.mouse_pos.xy = pygame.mouse.get_pos()
+            do_action(c_input)
+            
     

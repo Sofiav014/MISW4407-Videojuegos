@@ -10,7 +10,7 @@ def system_movement(world:esper.World, delta_time:float) -> None:
     c_velocity: CSurface
     c_transform: CTransform
 
-    for entity, (c_velocity, c_transform) in components:
+    for _, (c_velocity, c_transform) in components:
         c_transform.pos.x += c_velocity.vel.x * delta_time
         c_transform.pos.y += c_velocity.vel.y * delta_time
         

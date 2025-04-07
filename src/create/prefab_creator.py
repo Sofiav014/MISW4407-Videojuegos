@@ -7,6 +7,7 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_enemy_spawner import CEnemySpawner
+from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 
@@ -74,8 +75,36 @@ def create_input_player(ecs_world:esper.World) :
     input_right = ecs_world.create_entity()
     input_up = ecs_world.create_entity()
     input_down = ecs_world.create_entity()
+    input_fire = ecs_world.create_entity()
+    
     ecs_world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_up, CInputCommand("PLAYER_UP", pygame.K_UP))
     ecs_world.add_component(input_down, CInputCommand("PLAYER_DOWN", pygame.K_DOWN))
+    ecs_world.add_component(input_fire, CInputCommand("PLAYER_FIRE", pygame.BUTTON_LEFT))
+
+def create_bullet(ecs_world:esper.World, end_pos:pygame.Vector2, start_pos:pygame.Vector2, bullet_info:dict, player_size:pygame.Vector2):
+    """
+    Creates a bullet entity in the ECS world with the specified properties.
+    Args:
+        ecs_world (esper.World): The ECS world where the bullet entity will be created.
+        end_pos (pygame.Vector2): The target position indicating the direction of the bullet.
+        start_pos (pygame.Vector2): The starting position of the bullet.
+        bullet_info (dict): A dictionary containing bullet properties:
+            - "size": A dictionary with "x" and "y" keys for the bullet's dimensions.
+            - "color": A dictionary with "r", "g", and "b" keys for the bullet's color.
+            - "velocity": A float representing the speed of the bullet.
+        player_size (pygame.Vector2): The size of the player entity, used to calculate the bullet's initial position.
+    Returns:
+            None
+    """
+    size = pygame.Vector2(bullet_info["size"]["x"], bullet_info["size"]["y"])
+    color = pygame.Color(bullet_info["color"]["r"],
+                       bullet_info["color"]["g"],
+                       bullet_info["color"]["b"])
     
+    pos = pygame.Vector2(start_pos.x + (player_size.x / 2), start_pos.y + (player_size.y / 2))
+    direction = (end_pos - start_pos).normalize()
+    vel = direction * bullet_info["velocity"]
+    bullet_entity = create_square(ecs_world, size, pos, vel, color)
+    ecs_world.add_component(bullet_entity, CTagBullet())  

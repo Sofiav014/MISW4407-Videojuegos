@@ -1,0 +1,28 @@
+import esper
+
+from src.ecs.components.c_surface import CSurface
+from src.ecs.components.c_transform import CTransform
+from src.ecs.components.tags.c_tag_bullet import CTagBullet
+from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+
+def system_collision_bullet_enemy (ecs_world: esper.World) -> None:
+    """
+    System to handle collision between bullet and enemies.
+    This system checks for collisions between the bullet and enemy entities.
+    If a collision is detected, the enemy entity is removed from the world.
+    """
+    
+    enemy_components = ecs_world.get_components(CSurface, CTransform, CTagEnemy)
+    bullet_components = ecs_world.get_components(CSurface, CTransform, CTagBullet)
+    
+    c_surface: CSurface
+    c_transform: CTransform
+    for enemy_entity, (c_surface, c_transform, _) in enemy_components:
+        enemy_rect = c_surface.surf.get_rect(topleft=c_transform.pos)
+        
+        for bullet_entity, (c_surface, c_transform, _) in bullet_components:
+            bullet_rect = c_surface.surf.get_rect(topleft=c_transform.pos)
+            
+            if enemy_rect.colliderect(bullet_rect):
+                ecs_world.delete_entity(enemy_entity)
+                ecs_world.delete_entity(bullet_entity)
