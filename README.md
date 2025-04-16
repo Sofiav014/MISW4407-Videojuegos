@@ -1,87 +1,157 @@
-# Enunciado - Ejercicio Entregable Semana 2
+# Enunciado - Ejercicio Entregable Semana 3
 
-Cree un programa que agregue al que entregó en el primer ejercicio el siguiente comportamiento:
+Cree un programa que agregue al que entregó en el anterior ejercicio el siguiente comportamiento:
 
-- El usuario controla por medio de la entrada de teclado (específicamente las flechas direccionales del teclado) el movimiento de un rectángulo. Con las flechas lo puede mover arriba-abajo e izquierda-derecha un número de pixeles nP por segundo.
+- Además de los enemigos actuales, que causan daño al entrar en contacto con el personaje, defina ahora otros que se ven atraídos por el personaje. Esa atracción se da a una distancia d, y hace que se muevan hacia el personaje a una velocidad v.
 
-- El personaje no puede salir de la pantalla.
+    - Estos enemigos, cuando estén mas allá de una distancia d_o de su posición de origen p_o, automáticamente se regresarán a su punto de origen sin perseguir al jugador,
+    - Una vez vuelven a su origen pueden volver a perseguir al jugador si cumple el requisito de distancia nuevamente.
 
-- El usuario puede disparar balas con el botón izquierdo del ratón (i.e. cuadrados pequeños de otro color), las cuales salen en la dirección definida desde el personaje hasta la posición del ratón. Las balas salen siempre desde la mitad del personaje a una velocidad nV.
+- Use los sprites dados tanto para el personaje como para los enemigos. 
 
-- Si la bala toca otro rectángulo, tanto la bala como el otro rectángulo desaparecen.
+    - Tanto el jugador, como el nuevo enemigo utilizan sprites animados solamente cuando están en movimiento.
 
-- Si la bala llega a alguno de los bordes del juego sin tocar otro rectángulo, desaparece.
+- Agregue un efecto de explosión a los rectángulos, después de estrellarse con otros y antes de desaparecer.
 
-- Hay un límite de balas de jugador que pueden existir en el mundo al mismo tiempo, definido por el archivo de configuración del nivel.
+    - La explosión contiene una animación nueva para implementar.
+    - Considere la explosión como una entidad separada que surge cuando las otras desaparecen. La explosión desparece por su cuenta al finalizar su animación.
 
-- La información de configuración de la bala (tamaño, color, velocidad) junto con la información de movimiento del jugador (nP) se encuentra en el archivo de configuración, además de la información que venía del ejercicio anterior.
+Un ejemplo del resultado del ejercicio se puede ver aquí
 
-## Detalles de configuración 
+(SEMANA TRES - EJERCICIO - RESULTADO WEB)
+
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
+
+
+## Detalles de recursos
+
+Este proyecto va a utilizar recursos de imagen para cargar texturas y crear sprites. Estos recursos los pueden encontrar aquí 
+
+(SEMANA TRES - EJERCICIO - RECURSOS PARA VERIFICACIÓN)
+
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
+
+
+## Detalles de configuración
 
 Va a existir algunos cambios en la configuración, respecto a la configuración anterior. También aparecen nuevos elementos para configurar. 
 
-### Nivel
+### De rectángulos a texturas y animaciones
 
-El nivel posee una modificación adicional para controlar aspectos nuevos del ejercicio:
+Las entidades anteriormente utilizaban tamaño y color para definirse. Ahora, los rectángulos no se definen con estas caracterpistica, sino con una sola:
 
-- Un lugar de origen del jugador que determina donde comienza.
+- Image: Una ruta relativa al archivo main.py de una imagen de tipo png.
 
-- Un número máximo de balas permitidas en ese nivel.
+Las entidades de manera opcional, pueden tener animaciones. Las animaciones son una serie de imágenes lineales en una sola textura con un ancho determinado. sus propiedades
 
-### Jugador
+- Numero de cuadros del sprite: cuando cuadros en una sola textura tiene.
 
-El jugador va a tener su propia configuración con las siguientes características:
+- Lista de animaciones: una o varias animaciones con las siguientes propiedades
+    - Nombre
+    - Cuadro de  inicio: En que cuadro comienza. empieza desde cero
+    - Cuadro final: En que cuadro termina la animación. Debe ser igual o mayor que el de inicio.
+    - Velocidad o framerate: Velocidad de la animación en cuadros por segundo. No puede ser cero.
 
-- Un tamaño
+Pregunta 1
+Enunciado
 
-- Un color
+Cree un programa que agregue al que entregó en el anterior ejercicio el siguiente comportamiento:
 
-- Una velocidad de entrada, que determina la velocidad del movimiento con el teclado
+- Además de los enemigos actuales, que causan daño al entrar en contacto con el personaje, defina ahora otros que se ven atraídos por el personaje. Esa atracción se da a una distancia d, y hace que se muevan hacia el personaje a una velocidad v.
+
+    - Estos enemigos, cuando estén mas allá de una distancia d_o de su posición de origen p_o, automáticamente se regresarán a su punto de origen sin perseguir al jugador,
+
+    - Una vez vuelven a su origen pueden volver a perseguir al jugador si cumple el requisito de distancia nuevamente.
+
+- Use los sprites dados tanto para el personaje como para los enemigos. 
+
+    - Tanto el jugador, como el nuevo enemigo utilizan sprites animados solamente cuando están en movimiento.
+
+- Agregue un efecto de explosión a los rectángulos, después de estrellarse con otros y antes de desaparecer.
+
+    - La explosión contiene una animación nueva para implementar.
+
+    - Considere la explosión como una entidad separada que surge cuando las otras desaparecen. La explosión desparece por su cuenta al finalizar su animación.
+
+Un ejemplo del resultado del ejercicio se puede ver aquí
+(SEMANA TRES - EJERCICIO - RESULTADO WEB)
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
+
+Detalles de recursos
+
+Este proyecto va a utilizar recursos de imagen para cargar texturas y crear sprites. Estos recursos los pueden encontrar aquí 
+(SEMANA TRES - EJERCICIO - RECURSOS PARA VERIFICACIÓN)
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
+
+Detalles de configuración
+
+Va a existir algunos cambios en la configuración, respecto a la configuración anterior. También aparecen nuevos elementos para configurar. 
+De rectángulos a texturas y animaciones
+
+Las entidades anteriormente utilizaban tamaño y color para definirse. Ahora, los rectángulos no se definen con estas caracterpistica, sino con una sola:
+
+- Image: Una ruta relativa al archivo main.py de una imagen de tipo png.
+
+Las entidades de manera opcional, pueden tener animaciones. Las animaciones son una serie de imágenes lineales en una sola textura con un ancho determinado. sus propiedades
+
+- Numero de cuadros del sprite: cuando cuadros en una sola textura tiene.
+
+- Lista de animaciones: una o varias animaciones con las siguientes propiedades
+
+    - Nombre
+
+    - Cuadro de  inicio: En que cuadro comienza. empieza desde cero
+
+    - Cuadro final: En que cuadro termina la animación. Debe ser igual o mayor que el de inicio.
+
+    - Velocidad o framerate: Velocidad de la animación en cuadros por segundo. No puede ser cero.
+
+### Enemigos
+
+Todos los enemigos ahora tiene sprites únicos en vez de tamaño y color. 
+
+También existe un nuevo tipo de enemigo llamado Hunter, y tiene características propias de animación y textura. El enemigo Hunter tiene animaciones de MOVE e IDLE
+
+### Jugador 
+
+El jugador ahora posee una textura y animaciones, en vez de tamaño y color. sus animaciones son  MOVE e IDLE.
 
 ### Bala
 
-La bala es disparada desde el centro del rectángulo jugador con el clic izquierdo del ratón. Las propiedades de la bala son:
+La bala ahora tiene su propio sprite único
 
-- Un tamaño
+### Explosion
 
-- Un color
+Existe una nueva entidad llamada explosión Aparece cuando una bala choca contra un enemigo o un jugador choca contra un enemigo. Tiene una única animación EXPLODE. La entidad desaparece cuando la animación termine.
 
-- Una velocidad de disparo constante
+## Detalles de implementación
 
-## Detalles de  implementación
+Este ejercicio es una extensión del trabajo desarrollado hasta éste módulo. Para éste nivel tenga en cuenta lo siguiente:
 
-Este ejercicio es una extensión del trabajo desarrollado hasta éste módulo en la semana 1. Para éste nivel tenga en cuenta lo siguiente:
-
-- Se recomienda crear un componente CInputCommand que controla los aspectos del input en el juego.
-
-- Los componentes de tipo etiqueta recomendados, que representan e identifican tipos de entidades en los diferentes sistemas, son CTagPlayer, CTagBullet y CTagEnemy. 
-
-- Los sistemas recomendados para este ejercicio son:
-
-    - Un sistema que controle el input del jugador e invoca las acciones siguiendo el patrón Command.
-
-        - Las acciones del jugador son: PLAYER_LEFT, PLAYER_RIGHT, PLAYER_UP, PLAYER_DOWN y PLAYER_FIRE
-
-        - Recuerde que el sistema de Input debe seguir el patrón Command descrito en el curso
-
-    - Un sistema que controle los límites del jugador
-
-    - Un sistema que controle los limites de las balas y los elimina si se salen de la pantalla
-
-    - Un sistema de colisiones entre el jugador y los enemigos
-
-    - Un sistema de colisiones entre los enemigos y las balas
-
+- Lo primero es modificar el componente de CSurface para que soporte texturas y sprites.
+    - Esto hará grandes cambios en el calculo de áreas para colisión y tamaños.
+    - Por lo tanto, se recomienda una propiedad de "área" que determina el dibujado y tamaño de los rectángulos dada una textura y un sprite.
+- El gran nuevo componente es el de animación, que será capaz de controla el flujo de la animación de cada personaje.
+    - Se recomienda tener una clase de ayuda como propiedad del componente para almacenar animaciones.
+- Va a existir un nuevo tipo de enemigo, Hunter que representa al nuevo enemigo
+- Es posible o crear un nuevo componente etiqueta para ello, o generar una propiedad de tipo de enemigo en la etiqueta de enemigo original.
+- Se recomienda también crear una nueva etiqueta para la explosión
+ -Los sistemas recomendados son:
+    - Un sistema que controle cualquier componente de animación
+    - Un sistema para controlar el estado del enemigo nuevo
+    - Un sistema que controla el estado de la animación del jugador
+    - Un sistema que se encargue de eliminar las explosiones cuando terminen
 - Los archivos json han sido modificados, así como existen nuevos archivos de configuración que deben ser tenidos en cuenta.
 
 ## Archivos de configuración
 
-Varios ejemplos de archivos de configuración (los cuales serán utilizados para probar en la evaluación) se pueden descargar desde aquí: 
+Pueden observar un ejemplo de los archivos de configuración e imágenes aquí:
 
-(SEMANA DOS - EJERCICIO - RECURSOS PARA VERIFICACIÓN)
+(SEMANA TRES - EJERCICIO - RECURSOS PARA VERIFICACIÓN)
+
 https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
 
-Se espera que, como mínimo, estos archivos de configuración de ejemplo funcionen. Se ofrecen varios para probar diversas situaciones. Solamente deben copiar y pegar reemplazando el contenido de los archivos de configuración.
+Se espera que, como mínimo, estos archivos de configuración de ejemplo funcionen. Se ofrecen varios para probar diversas situaciones.
 
 - Los archivos de configuración que se deben implementar son los siguientes:
 

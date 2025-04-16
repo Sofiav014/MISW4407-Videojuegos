@@ -14,7 +14,7 @@ def system_screen_player(world:esper.World, screen:pygame.Surface) -> None:
     c_surface: CSurface
 
     for _, (c_transform, c_surface, _) in components:
-        player_rect = c_surface.surf.get_rect(topleft=c_transform.pos)
+        player_rect = CSurface.get_area_relative(c_surface.area, c_transform.pos)
 
         if not screen_rect.contains(player_rect):
             player_rect.clamp_ip(screen_rect)

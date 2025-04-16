@@ -1,7 +1,7 @@
 import esper
 
 from src.ecs.components.c_enemy_spawner import CEnemySpawner, SpawnEventData
-from src.create.prefab_creator import create_enemy_square
+from src.create.prefab_creator import create_enemy_square, create_hunter_square
 
 
 def system_enemy_spawner(world: esper.World, 
@@ -17,11 +17,17 @@ def system_enemy_spawner(world: esper.World,
         spw_event:SpawnEventData
         for spw_event in c_enemy_spawner.spawn_event_data:
             if not spw_event.triggered and c_enemy_spawner.elapsed_time >= spw_event.time: 
-                spw_event.triggered = True                
-                
-                create_enemy_square(world, 
-                                      spw_event.position,
-                                      enemy_data[spw_event.enemy_type])
+                spw_event.triggered = True         
+                print(f"EnemyType: {spw_event.enemy_type} spawned at {spw_event.position}")       
+                if spw_event.enemy_type != "Hunter":
+                    create_enemy_square(world, 
+                                        spw_event.position,
+                                        enemy_data[spw_event.enemy_type])
+                else:
+                    create_hunter_square(world,
+                                        spw_event.position,
+                                        enemy_data[spw_event.enemy_type])
+
 
         
         

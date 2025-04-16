@@ -8,11 +8,16 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
+from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_collision_bullet_enemy import system_collision_bullet_enemy
+from src.ecs.systems.s_collision_hunter_enemy import system_collision_hunter_enemy
+from src.ecs.systems.s_explosion_animation_end import system_explosion_animation_end
 from src.ecs.systems.s_collision_player_enemy import system_collision_player_enemy
 from src.ecs.systems.s_enemy_spawner import system_enemy_spawner
+from src.ecs.systems.s_hunter_state import system_hunter_state
 from src.ecs.systems.s_input_player import system_input_player
 from src.ecs.systems.s_movement import system_movement
+from src.ecs.systems.s_player_state import system_player_state
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce_enemy import system_screen_bounce_enemy
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
@@ -41,16 +46,18 @@ class GameEngine:
 
 
     def _load_json(self):
-        with open("./assets/cfg/cfg_00/window.json", encoding="utf-8") as window_file:
+        with open("./assets/cfg/window.json", encoding="utf-8") as window_file:
             self.window_cfg = json.load(window_file)
-        with open("./assets/cfg/cfg_00/enemies.json") as enemies_file:
+        with open("./assets/cfg/enemies.json") as enemies_file:
             self.enemies_cfg = json.load(enemies_file)
-        with open("./assets/cfg/cfg_00/level_01.json") as level_01_file:
+        with open("./assets/cfg/level_01.json") as level_01_file:
             self.level_01_cfg = json.load(level_01_file)
-        with open("./assets/cfg/cfg_00/player.json") as player_file:
+        with open("./assets/cfg/player.json") as player_file:
             self.player_cfg = json.load(player_file)
-        with open("./assets/cfg/cfg_00/bullet.json") as bullet_file:
+        with open("./assets/cfg/bullet.json") as bullet_file:
             self.bullet_cfg = json.load(bullet_file)
+        with open("./assets/cfg/explosion.json") as explosion_file:
+            self.explosion_cfg = json.load(explosion_file)
 
 
     def run(self) -> None:
@@ -89,12 +96,21 @@ class GameEngine:
     def _update(self):
         system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies_cfg)
         system_movement(self.ecs_world, self.delta_time)
+        
+        system_player_state(self.ecs_world)
+        system_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["Hunter"])
+        
         system_screen_bounce_enemy(self.ecs_world, self.screen)
         system_screen_player(self.ecs_world, self.screen)
         system_screen_bullet(self.ecs_world, self.screen)
 
-        system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg)
-        system_collision_bullet_enemy(self.ecs_world)
+        system_collision_bullet_enemy(self.ecs_world, self.explosion_cfg)
+        system_collision_hunter_enemy(self.ecs_world, self.explosion_cfg)
+        system_collision_player_enemy(self.ecs_world, self._player_entity, self.level_01_cfg, self.explosion_cfg)
+        system_explosion_animation_end(self.ecs_world)
+
+        system_animation(self.ecs_world, self.delta_time)
+
         self.ecs_world._clear_dead_entities()
         
         self.bullets_alive = len(self.ecs_world.get_component(CTagBullet)) # Lista de tuplas
@@ -141,5 +157,5 @@ class GameEngine:
                                     c_input.mouse_pos, 
                                     self._player_c_transform.pos, 
                                     self.bullet_cfg, 
-                                    self._player_c_surface.surf.get_size())
+                                    self._player_c_surface.area.size)
                 
