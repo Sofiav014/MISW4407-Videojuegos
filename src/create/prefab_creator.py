@@ -43,7 +43,6 @@ def create_sprite(ecs_world:esper.World, pos:pygame.Vector2, vel: pygame.Vector2
     
     
 def create_enemy_square(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:dict):
-    print(enemy_info)
     enemy_surface = pygame.image.load(enemy_info["image"]).convert_alpha()
     # enemy_surface = pygame.transform.scale(enemy_surface, (enemy_info["size"]["x"], enemy_info["size"]["y"]))
     
