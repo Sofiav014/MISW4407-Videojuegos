@@ -55,7 +55,10 @@ def create_enemy_square(ecs_world:esper.World, pos:pygame.Vector2, enemy_info:di
     vel = pygame.Vector2(vel_x, vel_y)
     
     enemy_entity = create_sprite(ecs_world, pos, vel, enemy_surface)    
+    
     ecs_world.add_component(enemy_entity, CTagEnemy())
+    
+    ServiceLocator.sounds_service.play(enemy_info["sound"])
 
 def create_hunter_square(ecs_world:esper.World, pos:pygame.Vector2, hunter_info:dict):
     hunter_surface = ServiceLocator.images_service.get(hunter_info["image"])
@@ -124,6 +127,9 @@ def create_bullet(ecs_world:esper.World, end_pos:pygame.Vector2, start_pos:pygam
     direction = (end_pos - start_pos).normalize()
     vel = direction * bullet_info["velocity"]
     bullet_entity = create_sprite(ecs_world, pos, vel, bullet_surface)
+    
+    ServiceLocator.sounds_service.play(bullet_info["sound"])
+    
     ecs_world.add_component(bullet_entity, CTagBullet())  
 
 
@@ -134,4 +140,7 @@ def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict)
     world.add_component(explosion_entity,
                         CAnimation(explosion_info["animations"]))
     world.add_component(explosion_entity, CTagExplosion())
+    
+    ServiceLocator.sounds_service.play(explosion_info["sound"])
+    
     return explosion_entity
