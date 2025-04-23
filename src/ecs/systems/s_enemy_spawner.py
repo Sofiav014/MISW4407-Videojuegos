@@ -18,7 +18,6 @@ def system_enemy_spawner(world: esper.World,
         for spw_event in c_enemy_spawner.spawn_event_data:
             if not spw_event.triggered and c_enemy_spawner.elapsed_time >= spw_event.time: 
                 spw_event.triggered = True         
-                print(f"EnemyType: {spw_event.enemy_type} spawned at {spw_event.position}")       
                 if spw_event.enemy_type != "Hunter":
                     create_enemy_square(world, 
                                         spw_event.position,
