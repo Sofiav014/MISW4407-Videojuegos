@@ -41,7 +41,7 @@ def _do_return_state(c_animation:CAnimation, c_state_h:CHunterState, c_velocity:
     _set_animation(c_animation, 0)
     c_velocity.vel = (c_state_h.start_pos - c_transform.pos).normalize() * hunter_data["velocity_return"]
     dist = c_state_h.start_pos.distance_to(c_transform.pos)
-    if dist <= 1:
+    if dist <= 2:
         c_transform.pos.xy = c_state_h.start_pos.xy
         c_state_h.state = HunterState.IDLE
 
