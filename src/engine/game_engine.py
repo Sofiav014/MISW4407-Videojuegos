@@ -36,8 +36,10 @@ class GameEngine:
 
         self.clock = pygame.time.Clock()
         self.is_running = False
+        self.is_paused = False
         self.framerate = self.window_cfg["framerate"]
         self.delta_time = 0
+        self.special_look_on = None
         self.bg_color = pygame.Color(self.window_cfg["bg_color"]["r"], 
                                      self.window_cfg["bg_color"]["g"], 
                                      self.window_cfg["bg_color"]["b"])
@@ -66,7 +68,8 @@ class GameEngine:
         while self.is_running:
             self._calculate_time()
             self._process_events()
-            self._update()
+            if not self.is_paused:
+                self._update()
             self._draw()
         self._clean()
 
@@ -76,9 +79,12 @@ class GameEngine:
         self._player_c_velocity = self.ecs_world.component_for_entity(self._player_entity, CVelocity)
         self._player_c_transform = self.ecs_world.component_for_entity(self._player_entity, CTransform)
         self._player_c_surface = self.ecs_world.component_for_entity(self._player_entity, CSurface)
-        
         create_enemy_spawner(self.ecs_world, self.level_01_cfg)
         create_input_player(self.ecs_world)
+        create_text_interface(self.ecs_world, self.interface_data, "title")
+        create_text_interface(self.ecs_world, self.interface_data, "controles")
+        charge_text_entity = create_special_bullet_interface(self.ecs_world, self.interface_data, self.special_data)
+        self._special_bullet_text = self.ecs_world.component_for_entity(charge_text_entity, CSpecialText)
 
 
     def _calculate_time(self):
@@ -97,12 +103,20 @@ class GameEngine:
         system_enemy_spawner(self.ecs_world, self.delta_time, self.enemies_cfg)
         system_movement(self.ecs_world, self.delta_time)
         
+        self.special_look_on = system_special_bullet_lockon(self.ecs_world)
+        if(self.special_look_on != None):
+            system_special_bullet_movement(self.ecs_world, self.special_look_on,self.special_data)
+        
         system_player_state(self.ecs_world)
         system_hunter_state(self.ecs_world, self._player_entity, self.enemies_cfg["Hunter"])
         
         system_screen_bounce_enemy(self.ecs_world, self.screen)
         system_screen_player(self.ecs_world, self.screen)
         system_screen_bullet(self.ecs_world, self.screen)
+        
+        if(system_collision_enemy_bullet(self.ecs_world, self.explosion_data)):
+            self.special_look_on = None
+            self._special_bullet_text.next = True
 
         system_collision_bullet_enemy(self.ecs_world, self.explosion_cfg)
         # system_collision_hunter_enemy(self.ecs_world, self.explosion_cfg)
