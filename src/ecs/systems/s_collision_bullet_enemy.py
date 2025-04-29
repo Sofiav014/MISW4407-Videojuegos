@@ -5,6 +5,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_special_bullet import CTagSpecialBullet
 
 def system_collision_bullet_enemy (ecs_world: esper.World, explosion_cfg: dict) -> None:
     """
@@ -26,4 +27,11 @@ def system_collision_bullet_enemy (ecs_world: esper.World, explosion_cfg: dict) 
             if enemy_rect.colliderect(bullet_rect):
                 ecs_world.delete_entity(enemy_entity)
                 ecs_world.delete_entity(bullet_entity)
-                create_explosion(ecs_world, c_transform_e.pos, explosion_cfg)
+                    
+                
+                if ecs_world.has_component(bullet_entity, CTagSpecialBullet):
+                    create_explosion(ecs_world, c_transform_e.pos, explosion_cfg, 'special_image')
+                    return True
+                else:
+                    create_explosion(ecs_world, c_transform_e.pos, explosion_cfg, 'normal_image')
+    return False

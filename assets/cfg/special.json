@@ -1,0 +1,7 @@
+{
+    "sound" : "assets/snd/laser_special.ogg",
+    "image": "assets/img/bullet_special.png",
+    "velocity": 300,
+    "distance_start_chase": 150,
+    "cooldown": 5
+}

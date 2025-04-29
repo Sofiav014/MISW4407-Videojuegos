@@ -30,4 +30,4 @@ def system_collision_player_enemy (ecs_world: esper.World, player_entity: int, l
             pl_t.pos.x = level_cfg["player_spawn"]["position"]["x"] - (pl_s.surf.get_width() / 2)
             pl_t.pos.y = level_cfg["player_spawn"]["position"]["y"] - (pl_s.surf.get_height() / 2)
 
-            create_explosion(ecs_world, c_transform.pos, explosion_cfg)
+            create_explosion(ecs_world, c_transform.pos, explosion_cfg, 'normal_image')

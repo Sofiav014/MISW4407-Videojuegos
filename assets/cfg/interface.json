@@ -1,0 +1,56 @@
+{
+    "font": "assets/fnt/PressStart2P.ttf",
+    "pause": {
+        "text": "PAUSA",
+        "size": 14,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+        },
+        "pos": {
+            "x":280,
+            "y": 180
+        }
+    },
+    "title" : {
+        "text": "Entrega 4 - Sofia Velasquez",
+        "size": 10,
+        "color": {
+            "r": 255,
+            "g": 0,
+            "b": 255
+        },
+        "pos": {
+            "x": 15,
+            "y": 15
+        }
+    },
+    "special":{
+        "text": "Special Ability:",
+        "size": 10,
+        "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        "pos": {
+            "x": 15,
+            "y": 340
+        }
+    },
+    "controles": {
+        "text": "Movimiento: Flechas\nDisparar: Click izquierdo\nHabilidad especial: Barra espaciadora",
+        "size": 8,
+        "color": {
+            "r": 255,
+            "g": 100,
+            "b": 100
+        },
+        "pos": {
+            "x": 15,
+            "y": 30
+        
+        }
+    }
+}

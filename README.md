@@ -36,7 +36,7 @@ Esta es la oportunidad para hacer el juego propio, con características propias 
 
 Aquí pueden ver un ejemplo de un potencial producto terminado usando una de las sugerencias:
 (SEMANA CUATRO - EJERCICIO - RESULTADO WEB)
-https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2024-12/
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
 
 No tienen que usar esto como plantilla de ejemplo. si desean hacer otro efecto o especial personalizado ¡Son bienvenidos y de hecho, se promueve hacerlo!
 
@@ -54,7 +54,7 @@ Recuerda poner la carpeta `assets` en la carpeta `dist`
 
 Este proyecto va a utilizar recursos de imagenes y sonidos Estos recursos los pueden encontrar aquí:
 (SEMANA CUATRO - EJERCICIO - RECURSOS PARA VERIFICACIÓN)
-https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2024-12/
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
 
 ## Detalles de configuración
 
@@ -106,7 +106,7 @@ Los elementos más importante que se recomiendan crear son los siguientes:
 
 En esta dirección se encuentran los recursos necesarios para este proyecto: 
 (SEMANA CUATRO - EJERCICIO - RECURSOS PARA VERIFICACIÓN)
-https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2024-12/
+https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2025-12/
 
 Puesto que hay un componente de personalización, es bienvenido el uso libre de recursos. 
 

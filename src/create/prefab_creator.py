@@ -15,6 +15,8 @@ from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
 from src.ecs.components.tags.c_tag_hunter import CTagHunter
 from src.ecs.components.tags.c_tag_player import CTagPlayer
+from src.ecs.components.tags.c_tag_special_bullet import CTagSpecialBullet
+from src.ecs.components.tags.c_tag_special_text import CSpecialText
 from src.engine.service_locator import ServiceLocator
 
 def create_square(ecs_world:esper.World,
@@ -98,12 +100,16 @@ def create_input_player(ecs_world:esper.World) :
     input_up = ecs_world.create_entity()
     input_down = ecs_world.create_entity()
     input_fire = ecs_world.create_entity()
+    input_pause = ecs_world.create_entity()
+    input_special = ecs_world.create_entity()
     
     ecs_world.add_component(input_left, CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
     ecs_world.add_component(input_right, CInputCommand("PLAYER_RIGHT", pygame.K_RIGHT))
     ecs_world.add_component(input_up, CInputCommand("PLAYER_UP", pygame.K_UP))
     ecs_world.add_component(input_down, CInputCommand("PLAYER_DOWN", pygame.K_DOWN))
     ecs_world.add_component(input_fire, CInputCommand("PLAYER_FIRE", pygame.BUTTON_LEFT))
+    ecs_world.add_component(input_pause, CInputCommand("PAUSE_GAME", pygame.K_p))
+    ecs_world.add_component(input_special, CInputCommand("PLAYER_SPECIAL", pygame.K_SPACE))
 
 def create_bullet(ecs_world:esper.World, end_pos:pygame.Vector2, start_pos:pygame.Vector2, bullet_info:dict, player_size:pygame.Vector2):
     """
@@ -133,8 +139,9 @@ def create_bullet(ecs_world:esper.World, end_pos:pygame.Vector2, start_pos:pygam
     ecs_world.add_component(bullet_entity, CTagBullet())  
 
 
-def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict) -> int:
-    explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
+def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict, type:str) -> int:
+    
+    explosion_surface = ServiceLocator.images_service.get(explosion_info[type])
     vel = pygame.Vector2(0, 0)
     explosion_entity = create_sprite(world, pos, vel, explosion_surface)
     world.add_component(explosion_entity,
@@ -144,3 +151,49 @@ def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict)
     ServiceLocator.sounds_service.play(explosion_info["sound"])
     
     return explosion_entity
+
+def create_text(world:esper.World, text:str, font:pygame.font.Font, color:pygame.Color, pos:pygame.Vector2):
+    text_entity = world.create_entity()
+    world.add_component(text_entity, CTransform(pos))
+    world.add_component(text_entity, CSurface.from_text(text, font, color))
+    return text_entity
+
+def create_text_interface(world:esper.World, interface_info:dict, type:str):
+    font = ServiceLocator.texts_service.get(interface_info["font"], 
+                                            interface_info[type]["size"])
+    color = pygame.Color(interface_info[type]["color"]["r"],
+                         interface_info[type]["color"]["g"],
+                         interface_info[type]["color"]["b"])
+    pos = pygame.Vector2(interface_info[type]["pos"]["x"], interface_info[type]["pos"]["y"])
+    txt_entity = create_text(world, interface_info[type]["text"], font, color, pos)
+    return txt_entity
+
+def create_special_bullet_interface(world: esper.World, interface_info:dict, bullet_info:dict) -> int:
+    font_special = ServiceLocator.texts_service.get(interface_info["font"], 
+                                            interface_info["special"]["size"])
+    color_special = pygame.Color(interface_info["special"]["color"]["r"],
+                                        interface_info["special"]["color"]["g"],
+                                        interface_info["special"]["color"]["b"])
+    pos_special = pygame.Vector2(interface_info["special"]["pos"]["x"],
+                         interface_info["special"]["pos"]["y"])
+    create_text(world, interface_info["special"]["text"], font_special, color_special, pos_special)
+    
+    charge_special_font = ServiceLocator.texts_service.get(interface_info["font"], interface_info["title"]["size"])
+    charge_special_color = pygame.Color(0, 255, 0)
+    charge_special_pos = pos_special.copy() + pygame.Vector2(155, 0)
+    charge_special_text = "100%"
+    bullet_charge_text = create_text(world, charge_special_text, charge_special_font, charge_special_color, charge_special_pos)
+    world.add_component(bullet_charge_text,
+                        CSpecialText(bullet_info["cooldown"]))
+    return bullet_charge_text
+
+def create_special_bullets(world:esper.World, player_pos: pygame.Vector2, player_size: pygame.Vector2, special_info:dict):
+    special_surface = ServiceLocator.images_service.get(special_info["image"])
+    special_size = special_surface.get_rect().size
+    pos = pygame.Vector2(player_pos.x + player_size[0] - (special_size[1] / 2) + 10,
+                         player_pos.y + (player_size[1] /2 ) - (special_size[0] / 2))
+    vel = pygame.Vector2(0,0)
+    special_entity = create_sprite(world, pos, vel, special_surface)
+    world.add_component(special_entity, CTagBullet())
+    world.add_component(special_entity, CTagSpecialBullet())
+    ServiceLocator.sounds_service.play(special_info["sound"])

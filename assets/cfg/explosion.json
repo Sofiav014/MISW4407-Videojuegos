@@ -1,6 +1,7 @@
 {
     "sound": "assets/snd/explosion.ogg",
-    "image": "assets/img/explosion.png",
+    "normal_image": "assets/img/explosion.png",
+    "special_image": "assets/img/explosion_special.png",
     "animations": {
         "number_frames": 8,
         "list": [

@@ -17,4 +17,4 @@ def system_collision_hunter_enemy(world:esper.World, explosion_cfg:dict):
             if(not(world.has_component(enemy_entity, CTagHunter)) and hunter_rect.colliderect(enemy_rect)):
                 world.delete_entity(enemy_entity)
                 world.delete_entity(hunter_entity)
-                create_explosion(world, c_transform_h.pos, explosion_cfg)
+                create_explosion(world, c_transform_h.pos, explosion_cfg, 'normal_image')

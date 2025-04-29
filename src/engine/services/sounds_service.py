@@ -6,7 +6,15 @@ class SoundsService:
         self._sounds = {}
         
 
-    def play (self, path: str):
+    def play (self, path: str, loop: bool = False):
         if path not in self._sounds:
             self._sounds[path] = pygame.mixer.Sound(path)
-        self._sounds[path].play()
+            
+        if loop:
+            self._sounds[path].play(loops=-1)
+        else:
+            self._sounds[path].play()
+    
+    def stop (self, path: str):
+        if path in self._sounds:
+            self._sounds[path].stop()
